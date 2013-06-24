@@ -45,7 +45,7 @@ EncryptionKeyInfo::EncryptionKeyInfo(xmlNodePtr node)
     {
         fprintf(stderr, "Container::LoadEncryption() error: Node does not contain /enc:CipherData/enc:CipherValue \n");
     }
-    _vector = strings[0];
+    _cipher = strings[0];
     
 }
 

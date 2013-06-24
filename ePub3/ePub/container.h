@@ -120,7 +120,7 @@ public:
      @result Returns true if container-relative path is encrypted, or false if not.
      */
 
-    virtual bool                    IsPathEncrypted(const string& path) const;
+    virtual bool                    IsPathEncrypted(const string& path)         const;
     ///
     /// Retrieves the encryption key information embedded in the container.
     

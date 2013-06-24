@@ -37,7 +37,6 @@ EncryptionInfo::EncryptionInfo(xmlNodePtr node)
     {
         fprintf(stderr, "Container::LoadEncryption() error: EncryptionMethod Algorithm %s does not match AES-128 (http://www.w3.org/2001/04/xmlenc#kw-aes128) \n", strings[0].c_str());
     }
-    
     _algorithm = strings[0];
     
     strings = xpath.Strings("./dsig:KeyInfo/dsig:RetrievalMethod/@URI", node);
@@ -47,6 +46,13 @@ EncryptionInfo::EncryptionInfo(xmlNodePtr node)
     }
     strings[0].erase(0, 1);
     _retrieval_method = strings[0];
+    
+    strings = xpath.Strings("./dsig:KeyInfo/dsig:KeyIV", node);
+    if (strings.empty())
+    {
+        fprintf(stderr, "Container::LoadEncryption() error: Node does not contain ./dsig:KeyInfo/dsig:KeyIV \n");
+    }
+    _keyIV = strings[0];
     
     strings = xpath.Strings("./enc:CipherData/enc:CipherReference/@URI", node);
     if (strings.empty())

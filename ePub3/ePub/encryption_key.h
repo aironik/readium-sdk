@@ -40,10 +40,10 @@ public:
     EncryptionKeyInfo(xmlNodePtr node);
     ///
     /// Copy constructor.
-    EncryptionKeyInfo(const EncryptionKeyInfo& o) : _algorithm(o._algorithm), _location(o._location), _name(o._name), _vector(o._vector) {}
+    EncryptionKeyInfo(const EncryptionKeyInfo& o) : _algorithm(o._algorithm), _location(o._location), _name(o._name), _cipher(o._cipher) {}
     ///
     /// Move constructor.
-    EncryptionKeyInfo(EncryptionKeyInfo&& o) : _algorithm(std::move(o._algorithm)), _location(std::move(o._location)), _name(std::move(o._name)), _vector(std::move(o._vector)) {}
+    EncryptionKeyInfo(EncryptionKeyInfo&& o) : _algorithm(std::move(o._algorithm)), _location(std::move(o._location)), _name(std::move(o._name)), _cipher(std::move(o._cipher)) {}
     virtual     ~EncryptionKeyInfo() {}
     
     ///
@@ -76,18 +76,18 @@ public:
     
     ///
     /// Returns the key value
-    virtual const string&           Vector()                                 const   { return _vector; }
+    virtual const string&           Cipher()                                 const   { return _cipher; }
     ///
-    /// Assigns a value identifier.
-    /// @see Value()const
-    virtual void                    SetVector(const string& v)                       { _vector = v; }
-    virtual void                    SetVector(string&& v)                            { _vector = v; }
+    /// Assigns a cipher identifier.
+    /// @see Cipher()const
+    virtual void                    SetCipher(const string& c)                       { _cipher = c; }
+    virtual void                    SetCipher(string&& c)                            { _cipher = c; }
     
 protected:
     key_algorithm_type  _algorithm; ///< The algorithm identifier, as per XML-ENC or OCF.
     key_location        _location;  ///< EncryptedKey Location (Id)
     string              _name;      ///< Key name
-    string              _vector;     ///< Key value
+    string              _cipher;    ///< Key value
     
 };
 

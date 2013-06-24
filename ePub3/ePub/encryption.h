@@ -67,14 +67,14 @@ public:
                 EncryptionInfo(xmlNodePtr node);
     ///
     /// Copy constructor.
-                EncryptionInfo(const EncryptionInfo& o) : _algorithm(o._algorithm), _path(o._path), _retrieval_method(o._retrieval_method) {}
+                EncryptionInfo(const EncryptionInfo& o) : _algorithm(o._algorithm), _path(o._path), _retrieval_method(o._retrieval_method), _keyIV(o._keyIV) {}
     ///
     /// Move constructor.
-    EncryptionInfo(EncryptionInfo&& o) : _algorithm(std::move(o._algorithm)), _path(std::move(o._path)), _retrieval_method(std::move(o._retrieval_method)) {}
+    EncryptionInfo(EncryptionInfo&& o) : _algorithm(std::move(o._algorithm)), _path(std::move(o._path)), _retrieval_method(std::move(o._retrieval_method)), _keyIV(std::move(o._keyIV)) {}
     virtual     ~EncryptionInfo() {}
     
     ///
-    /// Returns an retrieval method URI
+    /// Returns a retrieval method URI
     virtual const retrieval_uri&    Retrieval_Method()                      const   { return _retrieval_method; }
     
     virtual void                    SetRetrieval_Method(const retrieval_uri& ret)   { _retrieval_method = ret; }
@@ -99,10 +99,19 @@ public:
     virtual void                    SetPath(const string& path)                     { _path = path; }
     virtual void                    SetPath(string&& path)                          { _path = path; }
     
+    ///
+    /// Returns an initialization vector
+    virtual const string&           KeyIV()                                 const   { return _keyIV; }
+    ///
+    /// Assigns a Container-relative path to an encrypted resource.
+    virtual void                    SetKeyIV(const string& iv)                     { _keyIV = iv; }
+    virtual void                    SetKeyIV(string&& iv)                          { _keyIV = iv; }
+    
 protected:
+    retrieval_uri   _retrieval_method;  ///< RetrievalMethod URI.
     algorithm_type  _algorithm;         ///< The algorithm identifier, as per XML-ENC or OCF.
     string          _path;              ///< The Container-relative path to an encrypted resource.
-    retrieval_uri   _retrieval_method;  ///< RetrievalMethod URI.
+    string          _keyIV;             ///< Initialization vector
 
 };
 
