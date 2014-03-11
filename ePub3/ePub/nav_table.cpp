@@ -117,12 +117,12 @@ NavigationElement*  NavigationTable::BuildNavigationPoint(xmlNodePtr liNode)
 
         if ( cName == "a" )
         {
-            point->SetTitle(reinterpret_cast<const char*>(xmlNodeGetContent(liChild)));
+            point->SetTitle(TitleFromNode(liChild));
             point->SetSourceHref(_getProp(liChild, "href"));
         }
         else if( cName == "span" )
         {
-            point->SetTitle(xmlNodeGetContent(liChild));
+            point->SetTitle(TitleFromNode(liChild));
         }
         else if( cName == "ol" )
         {
@@ -134,6 +134,63 @@ NavigationElement*  NavigationTable::BuildNavigationPoint(xmlNodePtr liNode)
     return point;
 }
 
+string NavigationTable::TitleFromNode(xmlNodePtr node) const
+{
+    string title;
+    for ( auto child = node->children; child != nullptr; child = child->next )
+    {
+        switch ( child->type )
+        {
+            case XML_ELEMENT_NODE:
+            {
+                title += TagOpenNameForTitleFromNode(child) + TitleFromNode(child) + TagCloseNameForTitleFromNode(child);
+                break;
+            }
+
+            default:
+                title += reinterpret_cast<const char*>(xmlNodeGetContent(child));
+                break;
+        }
+    }
+    return title;
+}
+
+string NavigationTable::TagOpenNameForTitleFromNode(xmlNodePtr node) const
+{
+    string tagName = TagNameForTitleFromNode(node);
+    if (tagName.length() > 0)
+    {
+        return "<" + tagName + ">";
+    }
+    return "";
+}
+
+string NavigationTable::TagCloseNameForTitleFromNode(xmlNodePtr node) const
+{
+    string tagName = TagNameForTitleFromNode(node);
+    if (tagName.length() > 0)
+    {
+        return "</" + tagName + ">";
+    }
+    return "";
+}
+
+string NavigationTable::TagNameForTitleFromNode(xmlNodePtr node) const {
+    std::string tagName(reinterpret_cast<const char*>(node->name));
+
+    static const std::map<std::string, std::string> tagsMap = {
+            { "b", "b" },
+            { "B", "b" },
+            { "i", "i" },
+            { "I", "i" },
+    };
+    auto tagIter = tagsMap.find(tagName);
+    if ( tagIter != tagsMap.end() )
+    {
+         return tagIter->second;
+    }
+    return "";
+}
 
 
 EPUB3_END_NAMESPACE

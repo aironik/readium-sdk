@@ -57,7 +57,12 @@ public:
     virtual void            SetSourceHref(const string& str)    { _sourceHref = str; }
     virtual void            SetSourceHref(string&& str)         { _sourceHref = str; }
 
-    
+private:
+    string                  TitleFromNode(xmlNodePtr node) const;
+    string                  TagOpenNameForTitleFromNode(xmlNodePtr node) const;
+    string                  TagCloseNameForTitleFromNode(xmlNodePtr node) const;
+    string                  TagNameForTitleFromNode(xmlNodePtr node) const;
+
 protected:
     string      _type;
     string      _title;     // optional
